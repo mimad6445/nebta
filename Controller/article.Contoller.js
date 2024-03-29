@@ -1,34 +1,34 @@
 const CRUD = require('../services/CRUD.op'); 
-const productdb = require("../model/product.model");
+const articledb = require("../model/article.model");
 const asyncWrapper = require('../middleware/asyncWrapper');
 const httpStatusText = require("../utils/httpStatusText")
 
 
 const getAll = asyncWrapper(async(req,res)=>{
-    const AllProduct = await CRUD.getAll(productdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {AllProduct}});
+    const Allarticle = await CRUD.getAll(articledb);
+    res.status(200).json({status : httpStatusText.SUCCESS, data : {Allarticle}});
 })
 
 const createOne = asyncWrapper(async(req,res)=>{
-    const addNewProduct = await CRUD.create([req.body],productdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {addNewProduct}});
+    const addNewarticle = await CRUD.create([req.body],articledb);
+    res.status(200).json({status : httpStatusText.SUCCESS, data : {addNewarticle}});
 })
 
 const getOne = asyncWrapper(async(req,res)=>{
     const Id = req.params.id; 
-    const getProduct = await CRUD.getOne(Id,productdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {getProduct}});
+    const getarticle = await CRUD.getOne(Id,articledb);
+    res.status(200).json({status : httpStatusText.SUCCESS, data : {getarticle}});
 })
 
 const update = asyncWrapper(async(req,res)=>{
     const Id = req.params.id; 
-    const updateProduct = await CRUD.update(Id, [req.body], productdb)
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {updateProduct}});
+    const updatearticle = await CRUD.update(Id, [req.body], articledb)
+    res.status(200).json({status : httpStatusText.SUCCESS, data : {updatearticle}});
 })
 
 const deleted = asyncWrapper(async(req,res)=>{
     const Id = req.params.id; 
-    const deletedObj = await CRUD.delete(Id, productdb)
+    const deletedObj = await CRUD.delete(Id, articledb)
     res.status(200).json({status : httpStatusText.SUCCESS, msg : "deleted data Successful "});
 })
 
