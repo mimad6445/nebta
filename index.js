@@ -11,6 +11,7 @@ const articleRouter = require('./router/article.Router')
 const CodePromoRouter = require('./router/CodePromo.Router')
 const NewsRouter = require('./router/news.Router')
 const offrePromotionRouter = require('./router/OffrePromotion.Router')
+const ConseilleRouter = require("./router/Conseille.Router")
 
 const app = express()
 
@@ -24,7 +25,7 @@ app.use('/api/article',articleRouter)
 app.use('/api/CodePromo',CodePromoRouter)
 app.use('/api/news',NewsRouter)
 app.use('/api/offredePromotion',offrePromotionRouter)
-
+app.use('/api/Conseille',ConseilleRouter);
 
 
 
