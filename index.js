@@ -7,11 +7,11 @@ require('dotenv').config()
 
 
 const productRouter = require('./router/productRouter')
-const articleRouter = require('./router/home/article.Router')
-const CodePromoRouter = require('./router/home/CodePromo.Router')
+// const articleRouter = require('./router/home/article.Router')
+// const CodePromoRouter = require('./router/home/CodePromo.Router')
 const NewsRouter = require('./router/home/news.Router')
-const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
-const ConseilleRouter = require("./router/home/Conseille.Router")
+// const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
+// const ConseilleRouter = require("./router/home/Conseille.Router")
 
 const app = express()
 
@@ -32,7 +32,7 @@ app.use('/api/news',NewsRouter)
 const port = process.env.PORT || 8000
 
 app.all('*',(req,res,next)=>{
-    res.json({status : httpStatusText.ERROR , msg : "cannot found data"});
+    res.status(404).json({status : httpStatusText.ERROR , msg : "cannot found data"});
 })
 
 app.use('*',(error,req,res,next)=>{

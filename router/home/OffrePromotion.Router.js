@@ -4,8 +4,6 @@ const controller = require('../../Controller/home/offrePromotion.Controller')
 
 
 
-
-
 router.route('/')
         .post(controller.createOffre)
         .get(controller.getAllOffre)

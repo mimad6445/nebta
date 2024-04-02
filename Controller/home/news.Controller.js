@@ -38,14 +38,7 @@ const deleteNews = async (req, res) => {
     }
 };
 
-const getAllNews = async (req, res) => {
-    try {
-        const newss = await news.find(); 
-        res.status(200).json(newss); 
-    } catch (error) {
-        res.status(500).json({ message: error.message }); 
-    }
-};
+
 
 const getOneNew = async (req, res) => {
     try {
@@ -75,6 +68,15 @@ const updateNews = async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+const getAllNews = async (req, res) => {
+    try {
+        const newss = await news.find(); 
+        res.status(200).json({ success: true, data: { newss } }); 
+    } catch (error) {
+        // If an error occurs, send an error response with the error message
+        res.status(500).json({ message: error.message }); 
     }
 };
 
