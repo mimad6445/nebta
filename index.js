@@ -35,10 +35,6 @@ app.all('*',(req,res,next)=>{
     res.json({status : httpStatusText.ERROR , msg : "cannot found data"});
 })
 
-app.use('*',(error,req,res,next)=>{
-    res.status(error.statusCode || 500).json({status : httpStatusText.ERROR , msg : error.message});
-})
-
 app.listen(port,()=>{
     console.log(`Listening to ${port}`)
 })

@@ -11,8 +11,7 @@ class CRUD {
             const savedObject = await newObject.save();
             return savedObject;
         } catch (error) {
-            const errorObj = AppError.create("Internt error Server",500,httpStatusText.ERROR);
-            return next(errorObj);
+            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
         }
     }
 
@@ -21,13 +20,11 @@ class CRUD {
             const deletedObject = await model.findByIdAndDelete(id);
             console.log(deletedObject)
             if(deletedObject === null){
-                const errorObj = AppError.create("--wrong id",404,httpStatusText.ERROR);
-                next(errorObj);
+                res.status(404).json({status: httpStatusText.FAIL, msg :"--wrong Id"})
             }
             return deletedObject;
         } catch (error) {
-            const errorObj = AppError.create("Internt error Server",500,httpStatusText.ERROR);
-            return next(errorObj);
+            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
         }
     }
 
@@ -35,13 +32,11 @@ class CRUD {
         try {
             const updatedObject = await model.findByIdAndUpdate(id, ...params, { new: true });
             if(!updatedObject){
-                const errorObj = AppError.create("--wrong id",404,httpStatusText.ERROR);
-                return next(errorObj);
+                res.status(404).json({status: httpStatusText.FAIL, msg :"wrong Id"})
             }
             return updatedObject;
         } catch (error) {
-            const errorObj = AppError.create("Internt error Server",500,httpStatusText.ERROR);
-            return next(errorObj);
+            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
         }
     }
 
@@ -50,8 +45,7 @@ class CRUD {
             const allObjects = await model.find();
             return allObjects;
         } catch (error) {
-            const errorObj = AppError.create("Internt error Server",500,httpStatusText.ERROR);
-            return next(errorObj);
+            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
         }
     }
 
@@ -59,13 +53,11 @@ class CRUD {
         try {
             const object = await model.findById(id);
             if(!object){
-                const errorObj = AppError.create("--wrong id",404,httpStatusText.ERROR);
-                return next(errorObj);
+                res.status(404).json({status: httpStatusText.FAIL, msg :"--wrong id"})
             }
             return object;
         } catch (error) {
-            const errorObj = AppError.create("Internt error Server",500,httpStatusText.ERROR);
-            return next(errorObj);
+            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
         }
     }
 }
