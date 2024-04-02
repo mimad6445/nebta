@@ -20,7 +20,7 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use('/api',productRouter)
+app.use('/api/product',productRouter)
 app.use('/api/article',articleRouter)
 app.use('/api/CodePromo',CodePromoRouter)
 app.use('/api/news',NewsRouter)
