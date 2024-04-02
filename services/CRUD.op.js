@@ -20,7 +20,8 @@ class CRUD {
             const deletedObject = await model.findByIdAndDelete(id);
             console.log(deletedObject)
             if(deletedObject === null){
-                res.status(404).json({status: httpStatusText.FAIL, msg :"--wrong Id"})
+                const errorObj = AppError.create("--wrong id",404,httpStatusText.ERROR);
+                next(errorObj);
             }
             return deletedObject;
         } catch (error) {
@@ -32,7 +33,8 @@ class CRUD {
         try {
             const updatedObject = await model.findByIdAndUpdate(id, ...params, { new: true });
             if(!updatedObject){
-                res.status(404).json({status: httpStatusText.FAIL, msg :"wrong Id"})
+                const errorObj = AppError.create("--wrong id",404,httpStatusText.ERROR);
+                return next(errorObj);
             }
             return updatedObject;
         } catch (error) {
@@ -53,7 +55,8 @@ class CRUD {
         try {
             const object = await model.findById(id);
             if(!object){
-                res.status(404).json({status: httpStatusText.FAIL, msg :"--wrong id"})
+                const errorObj = AppError.create("--wrong id",404,httpStatusText.ERROR);
+                return next(errorObj);
             }
             return object;
         } catch (error) {
