@@ -1,4 +1,4 @@
-const Conseilledb = require('../models/ConseilleduJour')
+const Conseilledb = require('../../model/home/Conseille.model')
 
 
 const createCode = async (req,res)=>{

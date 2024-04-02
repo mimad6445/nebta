@@ -7,12 +7,12 @@ const controller = require('../../Controller/home/news.Controller')
 
 
 router.route('/')
-        .post(controller.createOne)
-        .get(controller.getAll)
+        .post(controller.createNews)
+        .get(controller.getAllNews)
 
 router.route('/:id')
-        .delete(controller.deleted)
-        .get(controller.getOne)
-        .patch(controller.update);
+        .delete(controller.deleteNews)
+        .get(controller.getOneNew)
+        .patch(controller.updateNews);
         
 module.exports=router

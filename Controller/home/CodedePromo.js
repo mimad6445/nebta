@@ -1,4 +1,4 @@
-const codePromo = require('../models/CodePromo')
+const codePromo = require('../../model/home/CodePromo.model')
 
 
 const createCode = async (req,res)=>{

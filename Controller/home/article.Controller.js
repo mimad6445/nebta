@@ -1,4 +1,4 @@
-const article = require('../models/article')
+const article = require('../../model/home/article.model')
 
 
 const createArticle = async (req,res)=>{

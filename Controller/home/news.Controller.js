@@ -1,4 +1,4 @@
-const news = require('../models/news.alaune')
+const news = require('../../model/home/news.model')
 
 
 const createNews = async (req,res)=>{

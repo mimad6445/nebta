@@ -1,4 +1,4 @@
-const offrePromotion = require('../models/offrePromotion')
+const offrePromotion = require('../../model/home/OffreEtPromotion')
 
 
 const createOffre = async (req,res)=>{
