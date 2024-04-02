@@ -1,42 +1,88 @@
-const CRUD = require('../../services/CRUD.op'); 
-const newsdb = require("../../model/home/news.model");
-const asyncWrapper = require('../../middleware/asyncWrapper');
-const httpStatusText = require("../../utils/httpStatusText")
+const news = require('../models/news.alaune')
 
 
-const getAll = asyncWrapper(async(req,res)=>{
-    const Allnews = await CRUD.getAll(newsdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {Allnews}});
-})
+const createNews = async (req,res)=>{
+    try{
+        const {
+            Image
+        } = req.body;
+        
+        const newNews = new news({
+            Image
+        });
+        
+        await newNews.save()
+    res.status(201).json({ success: true, message: 'News added successfully', news: newNews });
+}catch (error) {
+    
+    res.status(500).json("nkmk sayah",error)
+    
+}}
 
-const createOne = asyncWrapper(async(req,res)=>{
-    const addNewNews = await CRUD.create([req.body],newsdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {addNewNews}});
-})
 
-const getOne = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const getNews = await CRUD.getOne(Id,newsdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {getNews}});
-})
+const deleteNews = async (req, res) => {
+    try {
+        const newsId = req.params.id;
 
-const update = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const updateNews = await CRUD.update(Id, [req.body], newsdb)
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {updateNews}});
-})
+        const News = await news.findById(newsId);
+        if (!News) {
+            return res.status(404).json({ success: false, message: 'News not found' });
+        }
 
-const deleted = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const deletedObj = await CRUD.delete(Id, newsdb)
-    res.status(200).json({status : httpStatusText.SUCCESS, msg : "deleted data Successful "});
-})
+        await News.findByIdAndDelete(newsId);
+
+        res.status(200).json({ success: true, message: 'News deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting News:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+const getAllNews = async (req, res) => {
+    try {
+        const newss = await news.find(); 
+        res.status(200).json(newss); 
+    } catch (error) {
+        res.status(500).json({ message: error.message }); 
+    }
+};
+
+const getOneNew = async (req, res) => {
+    try {
+        const newsId = req.params.id; 
+        const News = await news.findById(newsId); 
+        if (!News) {
+            return res.status(404).json({ message: 'News not found' });
+        }
+
+        res.status(200).json(News); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const updateNews = async (req, res) => {
+    try {
+        const newsId = req.params.id;
+        const updates = req.body;
+
+        const News = await news.findByIdAndUpdate(newsId, updates, { new: true });
+
+        if (!News) {
+            return res.status(404).json({ success: false, message: 'News not found' });
+        }
+        res.status(200).json({ success: true, message: 'news updated successfully', News });
+        
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
 
 
 module.exports = {
-    getAll,
-    getOne,
-    createOne,
-    deleted,
-    update
-}
+    createNews,
+    deleteNews,
+    getAllNews,
+    getOneNew,
+    updateNews
+  };

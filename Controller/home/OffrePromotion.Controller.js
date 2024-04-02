@@ -1,42 +1,88 @@
-const CRUD = require('../../services/CRUD.op'); 
-const OffrePromotiondb = require("../../model/home/OffreEtPromotion");
-const asyncWrapper = require('../../middleware/asyncWrapper');
-const httpStatusText = require("../../utils/httpStatusText")
+const offrePromotion = require('../models/offrePromotion')
 
 
-const getAll = asyncWrapper(async(req,res)=>{
-    const AllOffrePromotion = await CRUD.getAll(OffrePromotiondb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {AllOffrePromotion}});
-})
+const createOffre = async (req,res)=>{
+    try{
+        const {
+            titre,
+            Image,
+        } = req.body;
+        
+        const newOffre = new offrePromotion({
+            titre,
+            Image
+        });
+        
+        await newOffre.save()
+    res.status(201).json({ success: true, message: 'Offre added successfully', offre: newOffre });
+}catch (error) {
+    
+    res.status(500).json("nkmk sayah",error)
+    
+}}
 
-const createOne = asyncWrapper(async(req,res)=>{
-    const addNewOffrePromotion = await CRUD.create([req.body],OffrePromotiondb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {addNewOffrePromotion}});
-})
 
-const getOne = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const getOffrePromotion = await CRUD.getOne(Id,OffrePromotiondb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {getOffrePromotion}});
-})
+const deleteOffre = async (req, res) => {
+    try {
+        const offreId = req.params.id;
 
-const update = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const updateOffrePromotion = await CRUD.update(Id, [req.body], OffrePromotiondb)
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {updateOffrePromotion}});
-})
+        const offre = await offrePromotion.findById(offreId);
+        if (!offre) {
+            return res.status(404).json({ success: false, message: 'Offre not found' });
+        }
+        await offre.findByIdAndDelete(offreId);
 
-const deleted = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const deletedObj = await CRUD.delete(Id, OffrePromotiondb)
-    res.status(200).json({status : httpStatusText.SUCCESS, msg : "deleted data Successful "});
-})
+        res.status(200).json({ success: true, message: 'offre deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+const getAllOffre = async (req, res) => {
+    try {
+        const offres = await offrePromotion.find(); 
+        res.status(200).json(offres); 
+    } catch (error) {
+        res.status(500).json({ message: error.message }); 
+    }
+};
+
+const getOneOffre = async (req, res) => {
+    try {
+        const offreId = req.params.id; 
+        const offre = await offrePromotion.findById(offreId); 
+        if (!offre) {
+            return res.status(404).json({ message: 'Offre not found' });
+        }
+
+        res.status(200).json(offre); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const updateOffre = async (req, res) => {
+    try {
+        const offreId = req.params.id;
+        const updates = req.body;
+
+        const offre = await offrePromotion.findByIdAndUpdate(offreId, updates, { new: true });
+
+        if (!offre) {
+            return res.status(404).json({ success: false, message: 'Offre not found' });
+        }
+        res.status(200).json({ success: true, message: 'offre updated successfully', offre });
+        
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
 
 
 module.exports = {
-    getAll,
-    getOne,
-    createOne,
-    deleted,
-    update
-}
+    createOffre,
+    deleteOffre,
+    getAllOffre,
+    getOneOffre,
+    updateOffre
+  };
