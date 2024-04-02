@@ -7,10 +7,7 @@ const clientSchema = new mongoose.Schema({
     height: {type: Number, required:true},
     weight: {type: Number, required:true},
     avatar:{type: String, required:true},
-    PromotionPrice:{type: Number, required:false},
-    Promotion:{type: Boolean, default: false},
     maladieCronique: {type: Array, required:true},
-    ContreIndication: {type: Array, required:true},
 },{timestamps: true});
 
 
