@@ -7,11 +7,11 @@ require('dotenv').config()
 
 
 const productRouter = require('./router/productRouter')
-// const articleRouter = require('./router/home/article.Router')
-// const CodePromoRouter = require('./router/home/CodePromo.Router')
+const articleRouter = require('./router/home/article.Router')
+const CodePromoRouter = require('./router/home/CodePromo.Router')
 const NewsRouter = require('./router/home/news.Router')
-// const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
-// const ConseilleRouter = require("./router/home/Conseille.Router")
+const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
+const ConseilleRouter = require("./router/home/Conseille.Router")
 
 const app = express()
 
@@ -21,11 +21,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/api/product',productRouter)
-// app.use('/api/article',articleRouter)
-// app.use('/api/CodePromo',CodePromoRouter)
+app.use('/api/article',articleRouter)
+app.use('/api/CodePromo',CodePromoRouter)
 app.use('/api/news',NewsRouter)
-// app.use('/api/offredePromotion',offrePromotionRouter)
-// app.use('/api/Conseille',ConseilleRouter);
+app.use('/api/offredePromotion',offrePromotionRouter)
+app.use('/api/Conseille',ConseilleRouter);
 
 
 
