@@ -11,7 +11,7 @@ class CRUD {
             const savedObject = await newObject.save();
             return savedObject;
         } catch (error) {
-            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
+            res.status(500).json({status: httpStatusText.ERROR, msg :`Internt error Server ${error}`})
         }
     }
 
@@ -24,7 +24,7 @@ class CRUD {
             }
             return deletedObject;
         } catch (error) {
-            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
+            res.status(500).json({status: httpStatusText.ERROR, msg :`Internt error Server ${error}`})
         }
     }
 
@@ -36,7 +36,7 @@ class CRUD {
             }
             return updatedObject;
         } catch (error) {
-            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
+            res.status(500).json({status: httpStatusText.ERROR, msg :`Internt error Server ${error}`})
         }
     }
 
@@ -45,7 +45,7 @@ class CRUD {
             const allObjects = await model.find();
             return allObjects;
         } catch (error) {
-            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
+            res.status(500).json({status: httpStatusText.ERROR, msg :`Internt error Server ${error} `})
         }
     }
 
@@ -57,7 +57,7 @@ class CRUD {
             }
             return object;
         } catch (error) {
-            res.status(500).json({status: httpStatusText.ERROR, msg :"Internt error Server"})
+            res.status(500).json({status: httpStatusText.ERROR, msg :`Internt error Server ${error}`})
         }
     }
 }
