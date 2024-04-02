@@ -1,7 +1,7 @@
-const CRUD = require('../services/CRUD.op'); 
-const articledb = require("../model/article.model");
-const asyncWrapper = require('../middleware/asyncWrapper');
-const httpStatusText = require("../utils/httpStatusText")
+const CRUD = require('../../services/CRUD.op'); 
+const articledb = require("../../model/home/article.model");
+const asyncWrapper = require('../../middleware/asyncWrapper');
+const httpStatusText = require("../../utils/httpStatusText")
 
 
 const getAll = asyncWrapper(async(req,res)=>{

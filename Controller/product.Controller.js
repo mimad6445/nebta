@@ -2,11 +2,44 @@ const CRUD = require('../services/CRUD.op');
 const productdb = require("../model/product.model");
 const asyncWrapper = require('../middleware/asyncWrapper');
 const httpStatusText = require("../utils/httpStatusText")
+const { cacheData } = require('../middleware/redis');
+const redis = require("redis");
+
+
+
+
+const client = redis.createClient({
+    legacyMode: true,
+    port: 8000
+});
+client.connect().catch(console.log("top"))
 
 
 const getAll = asyncWrapper(async(req,res)=>{
-    const AllProduct = await CRUD.getAll(productdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {AllProduct}});
+    
+    client.get('allProduct',async (err, data) => {
+        if (err) {
+            console.error('Error getting data from Redis:', err);
+        }
+
+        if (data !== null) {
+            console.log('Data found in cache:', data);
+            res.status(200).json({ status: httpStatusText.SUCCESS, data: JSON.parse(data) });
+        }
+        else{
+            try {
+                const AllProduct = await CRUD.getAll(productdb);
+                console.log("chaching data");
+                cacheData(req,AllProduct)
+                res.status(200).json({status : httpStatusText.SUCCESS, data : {AllProduct}});
+            } catch (error) {
+                console.log("error in set data")
+            }
+        }
+    })
+    
+    
+    
 })
 
 const createOne = asyncWrapper(async(req,res)=>{

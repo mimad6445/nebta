@@ -7,11 +7,11 @@ require('dotenv').config()
 
 
 const productRouter = require('./router/productRouter')
-const articleRouter = require('./router/article.Router')
-const CodePromoRouter = require('./router/CodePromo.Router')
-const NewsRouter = require('./router/news.Router')
-const offrePromotionRouter = require('./router/OffrePromotion.Router')
-const ConseilleRouter = require("./router/Conseille.Router")
+const articleRouter = require('./router/home/article.Router')
+const CodePromoRouter = require('./router/home/CodePromo.Router')
+const NewsRouter = require('./router/home/news.Router')
+const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
+const ConseilleRouter = require("./router/home/Conseille.Router")
 
 const app = express()
 

@@ -1,14 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('../Controller/product.Controller')
-
+const {cacheMiddleware} = require("../middleware/redis")
 
 
 
 
 router.route('/')
         .post(controller.createOne)
-        .get(controller.getAll)
+        .get(cacheMiddleware,controller.getAll)
 
 router.route('/:id')
         .delete(controller.deleted)
