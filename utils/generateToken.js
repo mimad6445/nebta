@@ -5,7 +5,7 @@ module.exports = async (playlode)=>{
     const token = jwt.sign(
                             playlode,
                             process.env.JWT_SECRET_KEY,
-                            {expiresIn : '1m'}
+                            {expiresIn : 'never'}
                             );
     return token;
 } 
