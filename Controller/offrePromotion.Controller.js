@@ -1,4 +1,4 @@
-const offrePromotion = require('../../model/home/OffreEtPromotion')
+const offrePromotion = require('../model/home/OffreEtPromotion')
 
 
 const createOffre = async (req,res)=>{
@@ -25,7 +25,6 @@ const createOffre = async (req,res)=>{
 const deleteOffre = async (req, res) => {
     try {
         const offreId = req.params.id;
-
         const offre = await offrePromotion.findById(offreId);
         if (!offre) {
             return res.status(404).json({ success: false, message: 'Offre not found' });

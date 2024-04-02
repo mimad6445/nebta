@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../../Controller/home/offrePromotion.Controller')
+const controller = require('../../Controller/offrePromotion.Controller')
 
 
 

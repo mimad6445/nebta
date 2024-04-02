@@ -24,7 +24,7 @@ app.use('/api/product',productRouter)
 app.use('/api/article',articleRouter)
 app.use('/api/CodePromo',CodePromoRouter)
 app.use('/api/news',NewsRouter)
-app.use('/api/offredePromotion',offrePromotionRouter)
+app.use('/api/offredePromotion',offrePromotionRouter);
 app.use('/api/Conseille',ConseilleRouter);
 
 
