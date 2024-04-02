@@ -21,11 +21,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/api/product',productRouter)
-app.use('/api/article',articleRouter)
-app.use('/api/CodePromo',CodePromoRouter)
+// app.use('/api/article',articleRouter)
+// app.use('/api/CodePromo',CodePromoRouter)
 app.use('/api/news',NewsRouter)
-app.use('/api/offredePromotion',offrePromotionRouter)
-app.use('/api/Conseille',ConseilleRouter);
+// app.use('/api/offredePromotion',offrePromotionRouter)
+// app.use('/api/Conseille',ConseilleRouter);
 
 
 
