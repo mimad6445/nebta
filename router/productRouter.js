@@ -6,7 +6,7 @@ const {cacheMiddleware} = require("../middleware/redis")
 
 
 
-router.route('/')
+router.route('/product')
         .post(controller.createOne)
         .get(cacheMiddleware,controller.getAll)
 
