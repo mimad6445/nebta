@@ -6,11 +6,13 @@ const createCode = async (req,res)=>{
         const {
             code,
             Image,
+            discount
         } = req.body;
         
         const newCode = new codePromo({
             code,
-            Image
+            Image,
+            discount
         });
         
         await newCode.save()
