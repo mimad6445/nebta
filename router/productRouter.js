@@ -6,7 +6,6 @@ const {cacheMiddleware} = require("../middleware/redis")
 
 
 
-
 router.route('/')
         .post(controller.createOne)
         .get(cacheMiddleware,controller.getAll)
