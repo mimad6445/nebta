@@ -1,11 +1,12 @@
 const admindb = require("../../model/auth/admin.model");
 const asyncWrapper = require('../../middleware/asyncWrapper');
 const httpStatusText = require("../../utils/httpStatusText")
-const bcrypt = require("bcrypt")
+// const bcrypt = require("bcrypt")
 
 const createAdmin = asyncWrapper(async(req,res,next)=>{
     const {fullname, email , password ,role,avatar} = req.body;
-    const hashedPassword = await bcrypt.hash(password,10);
+    // const hashedPassword = await bcrypt.hash(password,10);
+    hassedPassword =password
     const addNewAdmin = new admindb({fullname,email,password:hashedPassword,role,avatar});
     await addNewAdmin.save();
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewAdmin } });
@@ -17,7 +18,8 @@ const login = asyncWrapper(async(req,res,next)=>{
     if(!admin){
         res.status(400).json({ status: httpStatusText.FAIL, message: "email n'exist pas" });
     }
-    const passwordCompare = await bcrypt.compare(password,admin.password);
+    // const passwordCompare = await bcrypt.compare(password,admin.password);
+    passwordCompare = password
     if(!passwordCompare){
         res.status(400).json({ status: httpStatusText.FAIL, message: "password" });
     }
