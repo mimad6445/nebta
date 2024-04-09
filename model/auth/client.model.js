@@ -8,6 +8,8 @@ const clientSchema = new mongoose.Schema({
     weight: {type: Number, required:true},
     avatar:{type: String, required:true},
     maladieCronique: {type: Array, required:true},
+    nocif: [{type : mongoose.Types.ObjectId,ref : "product"}],
+    recomonde: [{type : mongoose.Types.ObjectId,ref : "product"}],
 },{timestamps: true});
 
 
