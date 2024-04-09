@@ -12,6 +12,8 @@ const CodePromoRouter = require('./router/home/CodePromo.Router')
 const NewsRouter = require('./router/home/news.Router')
 const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
 const ConseilleRouter = require("./router/home/Conseille.Router")
+const AdminRouter = require("./router/auth/admin.Router");
+
 
 const app = express()
 
@@ -26,7 +28,7 @@ app.use('/api/CodePromo',CodePromoRouter)
 app.use('/api/news',NewsRouter)
 app.use('/api/offredePromotion',offrePromotionRouter);
 app.use('/api/Conseille',ConseilleRouter);
-
+app.use('/api/admin',AdminRouter);
 
 
 const port = process.env.PORT || 8000
