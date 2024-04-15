@@ -19,7 +19,7 @@ const createCode = async (req,res)=>{
     res.status(201).json({ success: true, message: 'Code added successfully', code: newCode });
 }catch (error) {
     
-    res.status(500).json("nkmk sayah",error)
+    res.status(500).json("error",error)
     
 }}
 

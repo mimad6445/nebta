@@ -17,7 +17,7 @@ const createOffre = async (req,res)=>{
     res.status(201).json({ success: true, message: 'Offre added successfully', offre: newOffre });
 }catch (error) {
     
-    res.status(500).json("nkmk sayah",error)
+    res.status(500).json("error",error)
     
 }}
 

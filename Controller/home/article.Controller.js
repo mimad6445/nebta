@@ -23,7 +23,7 @@ const createArticle = async (req,res)=>{
     res.status(201).json({ success: true, message: 'Article added successfully', article: newArticle });
 }catch (error) {
     
-    res.status(500).json("nkmk sayah",error)
+    res.status(500).json("error",error)
     
 }}
 

@@ -17,6 +17,7 @@ const productSchema = new mongoose.Schema({
     Precaution: {type: String, required:true},
     aromatherapie:{type: Boolean, default: false},
     epicerie:{type: Boolean, default: false},
+    LikedBy:{type: Number, default: 0},
 },{timestamps: true});
 
 module.exports= mongoose.model('product', productSchema);

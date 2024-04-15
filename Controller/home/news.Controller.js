@@ -15,7 +15,7 @@ const createNews = async (req,res)=>{
     res.status(201).json({ success: true, message: 'News added successfully', news: newNews });
 }catch (error) {
     
-    res.status(500).json("nkmk sayah",error)
+    res.status(500).json("error",error)
     
 }}
 

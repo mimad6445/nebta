@@ -1,18 +1,22 @@
 const express = require('express')
 const router = express.Router()
 const controller = require('../Controller/product.Controller')
-const {cacheMiddleware} = require("../middleware/redis")
+const controllerTop = require("../Controller/topProduct.Controller")
 
 
 
 
 router.route('/')
-        .post(controller.createOne)
-        .get(cacheMiddleware,controller.getAll)
+        .post(controller.createProduct)
+        .get(controller.getAllProducts)
 
+router.route('/topProduct')
+        .get(controllerTop.topProduct);
 router.route('/:id')
-        .delete(controller.deleted)
-        .get(controller.getOne)
-        .patch(controller.update);
-        
+        .delete(controller.deleteProduct)
+        .get(controller.getOneProduct)
+        .patch(controller.updateProduct);
+
+
+
 module.exports=router

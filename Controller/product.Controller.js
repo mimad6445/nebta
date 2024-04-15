@@ -1,45 +1,123 @@
-const CRUD = require('../services/CRUD.op'); 
-const productdb = require("../model/product.model");
-const asyncWrapper = require('../middleware/asyncWrapper');
-const httpStatusText = require("../utils/httpStatusText")
+const Product = require('../model/product.model')
+const asyncWrapper = require("../middleware/asyncWrapper")
+const httpStutsText = require("../utils/httpStatusText");
+const eventEmitter = require("../utils/eventEmitter")
+
+const createProduct = async (req,res)=>{
+    try{
+        const {
+            Image,
+            ProductName,
+            ProductScientificName,
+            ProductArabicName,
+            Productdesc,
+            stock,
+            Price,
+            PromotionPrice,
+            Promotion,
+            Indication,
+            ContreIndication,
+            Propriete,
+            ModeUtilisation,
+            Precaution,
+            aromatherapie,
+            epicerie,
+        } = req.body;
+        
+        const newProduct = new Product({
+            Image,
+            ProductName,
+            ProductScientificName,
+            ProductArabicName,
+            Productdesc,
+            stock,
+            Price,
+            PromotionPrice,
+            Promotion,
+            Indication,
+            ContreIndication,
+            Propriete,
+            ModeUtilisation,
+            Precaution,
+            aromatherapie,
+            epicerie,
+        });
+        
+        await newProduct.save()
+        eventEmitter.emit('productChanged');
+        res.status(201).json({ success: true, message: 'Product added successfully', product: newProduct });
+}catch (error) {
+    
+    res.status(500).json("error",error)
+    
+}}
 
 
+const deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
 
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
 
+        await Product.findByIdAndDelete(productId);
+        eventEmitter.emit('productChanged');
+        res.status(200).json({ success: true, message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
 
-const getAll = asyncWrapper(async(req,res)=>{
-        const AllProduct = await CRUD.getAll(productdb);
-        res.status(200).json({status : httpStatusText.SUCCESS, data : {AllProduct}});
-})
+const getAllProducts = async (req, res) => {
+    try {
+        const products = await Product.find(); 
+        res.status(200).json(products); 
+    } catch (error) {
+        res.status(500).json({ message: error.message }); 
+    }
+};
 
-const createOne = asyncWrapper(async(req,res)=>{
-    const addNewProduct = await CRUD.create([req.body],productdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {addNewProduct}});
-})
+const getOneProduct = async (req, res) => {
+    try {
+        const productId = req.params.id; 
+        const product = await Product.findById(productId); 
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
 
-const getOne = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const getProduct = await CRUD.getOne(Id,productdb);
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {getProduct}});
-})
+        res.status(200).json(product); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-const update = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const updateProduct = await CRUD.update(Id, [req.body], productdb)
-    res.status(200).json({status : httpStatusText.SUCCESS, data : {updateProduct}});
-})
+const updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const updates = req.body;
+        console.log("id : ",productId," \t update : ",updates );
+        const product = await Product.findByIdAndUpdate(productId, updates, { new: true });
 
-const deleted = asyncWrapper(async(req,res)=>{
-    const Id = req.params.id; 
-    const deletedObj = await CRUD.delete(Id, productdb)
-    res.status(200).json({status : httpStatusText.SUCCESS, msg : "deleted data Successful "});
-})
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+        eventEmitter.emit('productChanged');
+        res.status(200).json({ success: true, message: 'Product updated successfully', product });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
 
 
 module.exports = {
-    getAll,
-    getOne,
-    createOne,
-    deleted,
-    update
-}
+        createProduct,
+        deleteProduct,
+        getAllProducts,
+        getOneProduct,
+        updateProduct
+    };
