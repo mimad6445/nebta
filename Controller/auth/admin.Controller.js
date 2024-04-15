@@ -1,7 +1,7 @@
 const admindb = require("../../model/auth/admin.model");
-const asyncWrapper = require('../../middleware/asyncWrapper');
-const httpStatusText = require("../../utils/httpStatusText")
 const bcrypt = require("bcrypt")
+const httpStatusText = require("../../utils/httpStatusText")
+
 
 const createAdmin = async(req,res,next)=>{
     const {fullname, email , password ,role,avatar} = req.body;
