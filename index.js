@@ -13,7 +13,7 @@ const NewsRouter = require('./router/home/news.Router')
 const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
 const ConseilleRouter = require("./router/home/Conseille.Router")
 const AdminRouter = require("./router/auth/admin.Router");
-
+const ProfileRouter = require("./router/auth/Profile.Router")
 
 const app = express()
 
@@ -29,6 +29,7 @@ app.use('/api/news',NewsRouter)
 app.use('/api/offredePromotion',offrePromotionRouter);
 app.use('/api/Conseille',ConseilleRouter);
 app.use('/api/admin',AdminRouter);
+app.use('/api/Profile',ProfileRouter);
 
 
 const port = process.env.PORT || 8000
