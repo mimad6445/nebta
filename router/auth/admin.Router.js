@@ -14,5 +14,8 @@ router.route('/login')
 router.route('/AllAdmin')
         .get(controller.getAllAdmin)
 
+router.route('/:id')
+        .patch(controller.updateAdmin)
+        .delete(controller.deleteAdmin)
 
 module.exports=router

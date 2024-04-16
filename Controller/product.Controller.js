@@ -45,6 +45,7 @@ const createProduct = async (req,res)=>{
         
         await newProduct.save()
         eventEmitter.emit('productChanged');
+        eventEmitter.emit('addProduct',newProduct._id);
         res.status(201).json({ success: true, message: 'Product added successfully', product: newProduct });
 }catch (error) {
     
@@ -64,6 +65,7 @@ const deleteProduct = async (req, res) => {
 
         await Product.findByIdAndDelete(productId);
         eventEmitter.emit('productChanged');
+        eventEmitter.emit('deleteProduct',productId);
         res.status(200).json({ success: true, message: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);
@@ -98,13 +100,13 @@ const updateProduct = async (req, res) => {
     try {
         const productId = req.params.id;
         const updates = req.body;
-        console.log("id : ",productId," \t update : ",updates );
         const product = await Product.findByIdAndUpdate(productId, updates, { new: true });
 
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
         eventEmitter.emit('productChanged');
+        eventEmitter.emit('updateProduct',productId);
         res.status(200).json({ success: true, message: 'Product updated successfully', product });
     } catch (error) {
         console.error('Error updating product:', error);

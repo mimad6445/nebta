@@ -34,8 +34,36 @@ const getAllAdmin = asyncWrapper(async(req,res,next)=>{
     res.status(200).json(admins); 
 })
 
+const deleteAdmin = asyncWrapper(async(req,res,next)=>{
+    const adminId = req.params.id;
+    const admin = await admindb.findById(adminId);
+    if (!admin) {
+        return res.status(404).json({ success: httpStatusText.FAIL, message: "admin n'exist pas" });
+    }
+    await admindb.findByIdAndDelete(adminId);
+    res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Admin deleted successfully' });
+})
+
+const updateAdmin = async (req, res) => {
+    try {
+        const adminId = req.params.id;
+        const updates = req.body;
+        const admin = await admindb.findByIdAndUpdate(adminId, updates, { new: true });
+
+        if (!admin) {
+            return res.status(404).json({ success: httpStatusText.FAIL, message: 'Admin not found' });
+        }
+        res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Admin updated successfully', data : {admin} });
+    } catch (error) {
+        res.status(500).json({ success: httpStatusText.ERROR, message: 'Internal server error' });
+    }
+};
+
+
 module.exports = {
         createAdmin,
         login,
-        getAllAdmin
+        getAllAdmin,
+        deleteAdmin,
+        updateAdmin
     };

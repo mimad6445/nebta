@@ -5,7 +5,7 @@ const httpStutsText = require("../utils/httpStatusText");
 const topProduct =async (req, res, next) => {
     try {
         const top = await Product.find().sort({ LikedBy: -1 }).limit(3);
-    res.status(200).json({ status: httpStutsText.SUCCESS, data: { top } });
+        res.status(200).json({ status: httpStutsText.SUCCESS, data: { top } });
     } catch (error) {
         console.log("catched");
     }
