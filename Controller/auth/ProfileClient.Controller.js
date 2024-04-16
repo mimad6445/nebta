@@ -1,4 +1,4 @@
-const Profiledb = require("../../model/auth/Profile.model");
+const Profiledb = require("../../model/auth/profile.model");
 const productdb =require("../../model/product.model");
 const asyncWrapper = require('../../middleware/asyncWrapper');
 const httpStatusText = require("../../utils/httpStatusText")
