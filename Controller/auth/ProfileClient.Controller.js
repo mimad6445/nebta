@@ -21,9 +21,34 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
         }
     });
     addNewProfile.save()
-    console.log("Profile : ",addNewProfile);
+    res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewProfile }});
 })
 
+
+const deleteProfile = asyncWrapper(async(req,res,next)=>{
+    const ProfileId = req.params.id;
+    const Profile = await Profiledb.findById(ProfileId);
+    if (!Profile) {
+        return res.status(404).json({ success: httpStatusText.FAIL, message: "Profile n'exist pas" });
+    }
+    await Profiledb.findByIdAndDelete(ProfileId);
+    res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Profile deleted successfully' });
+})
+
+const updateProfile = asyncWrapper(async(req,res,next)=>{
+    try {
+        const ProfileId = req.params.id;
+        const updates = req.body;
+        const Profile = await Profiledb.findByIdAndUpdate(ProfileId, updates, { new: true });
+
+        if (!Profile) {
+            return res.status(404).json({ success: httpStatusText.FAIL, message: 'Profile not found' });
+        }
+        res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Profile updated successfully', data : {Profile} });
+    } catch (error) {
+        res.status(500).json({ success: httpStatusText.ERROR, message: 'Internal server error' });
+    }
+})
 
 eventEmitter.on('addProduct',async(id)=>{
     const Users = await Profiledb.find();
@@ -63,5 +88,7 @@ eventEmitter.on('updateProduct',async(id)=>{
 })
 
 module.exports = {
-    createProfile
+    createProfile,
+    deleteProfile,
+    updateProfile
   };

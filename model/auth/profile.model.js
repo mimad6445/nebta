@@ -14,4 +14,4 @@ const clientSchema = new mongoose.Schema({
 },{timestamps: true});
 
 
-module.exports= mongoose.model('Account', clientSchema);
+module.exports= mongoose.model('Profile', clientSchema);
