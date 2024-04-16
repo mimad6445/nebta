@@ -15,11 +15,11 @@ const login = asyncWrapper(async(req,res,next)=>{
     const {email,password} = req.body;
     const admin = await admindb.findOne({email : email});
     if(!admin){
-        res.status(400).json({ status: httpStatusText.FAIL, message: "email n'exist pas" });
+        res.status(404).json({ status: httpStatusText.FAIL, message: "email n'exist pas" });
     }
     const passwordCompare = await bcrypt.compare(password,admin.password);
     if(!passwordCompare){
-        res.status(400).json({ status: httpStatusText.FAIL, message: "password" });
+        res.status(404).json({ status: httpStatusText.FAIL, message: "password" });
     }
     res.status(200).json({status: httpStatusText.SUCCESS, data: {
         fullname : admin.fullname,
