@@ -3,6 +3,7 @@ const Connectdb = require('./database/Connectdb')
 const bodyParser = require('body-parser')
 const httpStatusText = require('./utils/httpStatusText');
 const cors = require('cors')
+const virefyToken = require("./middleware/virefytoken")
 require('dotenv').config()
 
 
@@ -14,6 +15,7 @@ const offrePromotionRouter = require('./router/home/OffrePromotion.Router')
 const ConseilleRouter = require("./router/home/Conseille.Router")
 const AdminRouter = require("./router/auth/admin.Router");
 const ProfileRouter = require("./router/auth/Profile.Router")
+const AccountRouter = require("./router/auth/Account.Router")
 
 const app = express()
 
@@ -29,8 +31,8 @@ app.use('/api/news',NewsRouter)
 app.use('/api/offredePromotion',offrePromotionRouter);
 app.use('/api/Conseille',ConseilleRouter);
 app.use('/api/admin',AdminRouter);
-app.use('/api/Profile',ProfileRouter);
-
+app.use('/api/Profile',virefyToken,ProfileRouter);
+app.use('/api/Account',AccountRouter)
 
 const port = process.env.PORT || 8000
 

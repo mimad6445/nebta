@@ -1,13 +1,12 @@
 const jwt = require("jsonwebtoken");
-const AppError = require("../utils/AppError");
+const httpStutsText = require("../utils/httpStatusText");
 require("dotenv").config();
 const httpStatusText = require("../utils/httpStatusText");
 
 module.exports = async(req,res,next)=>{
     const authHeader = req.headers['Authorization'] || req.headers['authorization']
     if(!authHeader){
-        const error = AppError.create("token required",401,httpStatusText.UNAUTHORIZED)
-        next(error);
+        res.status(401).json({status: httpStutsText.UNAUTHORIZED, msg: "token require"})
     }
     try{
         const token = authHeader.split(' ')[1];
@@ -16,7 +15,6 @@ module.exports = async(req,res,next)=>{
         req.currentuser = currentuser
         next();
     }catch{
-        const error = AppError.create("invalid token(expired)",401,httpStatusText.UNAUTHORIZED)
-        next(error);
+        res.status(400).json({status: httpStutsText.ERROR, msg: "error"})
     } 
 }

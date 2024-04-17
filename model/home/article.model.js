@@ -5,7 +5,8 @@ const article = new mongoose.Schema({
     imageOfArticle : {type : String,require : true},
     description : {type : String,require : true},
     link : {type : String,require : true},
-    counter : {type : Number,default: 0}
+    counter : {type : Number,default: 0},
+    isDisplay : {type : Boolean , default : false}
 },{timestamps: true});
 
 

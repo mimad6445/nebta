@@ -7,7 +7,7 @@ const clientSchema = new mongoose.Schema({
     DateOfBirth: {type: String, required:true},
     height: {type: Number, required:true},
     weight: {type: Number, required:true},
-    avatar:{type: String, required:true},
+    avatar:{type: String},
     maladieCronique: {type: Array, required:true},
     nocif: [{type : mongoose.Types.ObjectId,ref : "product"}],
     recomonde: [{type : mongoose.Types.ObjectId,ref : "product"}],

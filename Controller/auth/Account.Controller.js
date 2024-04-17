@@ -3,17 +3,25 @@ const Accountdb = require("../../model/auth/client.model")
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const bcrypt = require("bcrypt");
 const generateToken = require("../../utils/generateToken");
+const jwt = require("jsonwebtoken")
 
 
 const registerAccount = asyncWrapper(async(req,res)=>{
     const {email,password} = req.body;
     const hashedPassword = await bcrypt.hash(password,10);
+    const existingEmail = await Accountdb.findOne({ email });
+        if(existingEmail){
+            res.status(400).json({ status: httpStatusText.SUCCESS, mesg: "E-mail already exists"});
+        }
     const addNewAccount = new Accountdb({email,password:hashedPassword});
+    const token = await generateToken({ email:email , id: addNewAccount._id })
+    addNewAccount.token = token;
     await addNewAccount.save();
-    const product = await Accountdb.find();
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewAccount }});
 })
-const registerProfile = asyncWrapper(async(req,res)=>{  
+
+
+const addProfile = asyncWrapper(async(req,res)=>{  
     const AccountId = req.params.id;
     const { profileId} = req.body;
     const Account = await Accountdb.findById(AccountId)
@@ -33,17 +41,44 @@ const login = asyncWrapper(async(req,res)=>{
     if(!passwordCompare){
         res.status(404).json({ status: httpStatusText.FAIL, message: "password" });
     }
+    const token = await generateToken({email: email , id: Account._id})
     res.status(200).json({status: httpStatusText.SUCCESS, data: {
         profile : Account.profile,
         email : email,
+        token : token
     }})
 })
 
+const deleteAccount = asyncWrapper(async(req,res,next)=>{
+    const AccountId = req.params.id;
+    const Account = await Accountdb.findById(AccountId);
+    if (!Account) {
+        return res.status(404).json({ success: httpStatusText.FAIL, message: "Account n'exist pas" });
+    }
+    await Accountdb.findByIdAndDelete(AccountId);
+    res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Account deleted successfully' });
+})
 
+const updateAccount = asyncWrapper(async(req,res,next)=>{
+    try {
+        const AccountId = req.params.id;
+        const updates = req.body;
+        const Account = await Accountdb.findByIdAndUpdate(AccountId, updates, { new: true });
+
+        if (!Account) {
+            return res.status(404).json({ success: httpStatusText.FAIL, message: 'Account not found' });
+        }
+        res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Account updated successfully', data : {Account} });
+    } catch (error) {
+        res.status(500).json({ success: httpStatusText.ERROR, message: 'Internal server error' });
+    }
+})
 
 
 module.exports = {
     registerAccount,
-    registerProfile,
-    login
+    addProfile,
+    login,
+    updateAccount,
+    deleteAccount
 }
