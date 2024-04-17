@@ -32,7 +32,7 @@ const deleteCode = async (req, res) => {
         if (!code) {
             return res.status(404).json({ success: false, message: 'Code not found' });
         }
-        await code.findByIdAndDelete(CodeId);
+        await codePromo.findByIdAndDelete(CodeId);
 
         res.status(200).json({ success: true, message: 'code deleted successfully' });
     } catch (error) {
@@ -52,7 +52,7 @@ const getAllCode = async (req, res) => {
 const getOneCode = async (req, res) => {
     try {
         const codeId = req.params.id; 
-        const code = await offrePromotion.findById(codeId); 
+        const code = await CodePromo.findById(codeId); 
         if (!code) {
             return res.status(404).json({ message: 'Code not found' });
         }

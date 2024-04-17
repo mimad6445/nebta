@@ -1,20 +1,16 @@
 const Conseilledb = require('../../model/home/Conseille.model')
 
 
-const createCode = async (req,res)=>{
+const createConseille = async (req,res)=>{
     try{
-        const {
-            code,
-            Image,
-        } = req.body;
-        
-        const newCode = new codePromo({
-            code,
-            Image
+        const {Conseille} = req.body;
+        const newConseille = new Conseilledb({
+            Conseille
         });
-        
-        await newCode.save()
-    res.status(201).json({ success: true, message: 'Code added successfully', code: newCode });
+        const length = (await Conseilledb.find()).length
+        newConseille.id = length;
+        await newConseille.save()
+        res.status(201).json({ success: true, message: 'Conseille added successfully', Conseille: newConseille });
 }catch (error) {
     
     res.status(500).json("error",error)
@@ -22,56 +18,56 @@ const createCode = async (req,res)=>{
 }}
 
 
-const deleteCode = async (req, res) => {
+const deleteConseille = async (req, res) => {
     try {
-        const CodeId = req.params.id;
+        const ConseilleId = req.params.id;
 
-        const code = await codePromo.findById(CodeId);
-        if (!code) {
-            return res.status(404).json({ success: false, message: 'Code not found' });
+        const Conseille = await Conseilledb.findById(ConseilleId);
+        if (!Conseille) {
+            return res.status(404).json({ success: false, message: 'Conseille not found' });
         }
-        await code.findByIdAndDelete(CodeId);
+        await Conseilledb.findByIdAndDelete(ConseilleId);
 
-        res.status(200).json({ success: true, message: 'code deleted successfully' });
+        res.status(200).json({ success: true, message: 'Conseille deleted successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 
-const getAllCode = async (req, res) => {
+const getAllConseille = async (req, res) => {
     try {
-        const code = await codePromo.find(); 
-        res.status(200).json(code); 
+        const Conseille = await Conseilledb.find(); 
+        res.status(200).json(Conseille); 
     } catch (error) {
         res.status(500).json({ message: error.message }); 
     }
 };
 
-const getOneCode = async (req, res) => {
+const getOneConseille = async (req, res) => {
     try {
-        const codeId = req.params.id; 
-        const code = await offrePromotion.findById(codeId); 
-        if (!code) {
-            return res.status(404).json({ message: 'Code not found' });
+        const ConseilleId = req.params.id; 
+        const Conseille = await Conseilledb.findById(ConseilleId); 
+        if (!Conseille) {
+            return res.status(404).json({ message: 'Conseille not found' });
         }
 
-        res.status(200).json(code); 
+        res.status(200).json(Conseille); 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const updateCode = async (req, res) => {
+const updateConseille = async (req, res) => {
     try {
-        const CodeId = req.params.id;
+        const ConseilleId = req.params.id;
         const updates = req.body;
 
-        const code = await codePromo.findByIdAndUpdate(CodeId, updates, { new: true });
+        const Conseille = await Conseilledb.findByIdAndUpdate(ConseilleId, updates, { new: true });
 
-        if (!code) {
-            return res.status(404).json({ success: false, message: 'Code not found' });
+        if (!Conseille) {
+            return res.status(404).json({ success: false, message: 'Conseille not found' });
         }
-        res.status(200).json({ success: true, message: 'Code updated successfully', code });
+        res.status(200).json({ success: true, message: 'Conseille updated successfully', Conseille });
         
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -80,9 +76,9 @@ const updateCode = async (req, res) => {
 
 
 module.exports = {
-    createCode,
-    deleteCode,
-    getAllCode,
-    getOneCode,
-    updateCode
+    createConseille,
+    deleteConseille,
+    getAllConseille,
+    getOneConseille,
+    updateConseille
 };
