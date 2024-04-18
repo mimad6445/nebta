@@ -7,12 +7,12 @@ const controller = require('../../Controller/home/Conseilledujour.Controller')
 
 
 router.route('/')
-        .post(controller.createCode)
-        .get(controller.getAllCode)
+        .post(controller.createConseille)
+        .get(controller.getAllConseille)
 
 router.route('/:id')
-        .delete(controller.deleteCode)
-        .get(controller.getOneCode)
-        .patch(controller.updateCode);
+        .delete(controller.deleteConseille)
+        .get(controller.getOneConseille)
+        .patch(controller.updateConseille);
         
 module.exports=router

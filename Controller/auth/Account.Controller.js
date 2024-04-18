@@ -1,5 +1,4 @@
-const clientdb = require("../../model/auth/client.model")
-const Accountdb = require("../../model/auth/client.model")
+const Accountdb = require("../../model/auth/Account.model")
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const bcrypt = require("bcrypt");
 const generateToken = require("../../utils/generateToken");
