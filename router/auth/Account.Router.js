@@ -37,8 +37,10 @@ router.route('/login')
 // });
 
 router.route('/:id')
-        .post(controller.addProfile)
+        .patch(controller.addProfile)
         .delete(controller.deleteAccount)
+
+router.route('update/:id')
         .patch(controller.updateAccount);
 
 module.exports = router;
