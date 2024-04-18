@@ -8,7 +8,7 @@ const clientSchema = new mongoose.Schema({
     height: {type: Number, required:true},
     weight: {type: Number, required:true},
     avatar:{type: String},
-    maladieCronique: {type: Array, required:true},
+    maladieCronique: {type: Array},
     nocif: [{type : mongoose.Types.ObjectId,ref : "product"}],
     recomonde: [{type : mongoose.Types.ObjectId,ref : "product"}],
     CodePromo : [{type : mongoose.Types.ObjectId,ref : "codePromo"}]

@@ -2,8 +2,7 @@ const Accountdb = require("../../model/auth/Account.model")
 const asyncWrapper = require("../../middleware/asyncWrapper");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../../utils/generateToken");
-const jwt = require("jsonwebtoken")
-
+const httpStatusText = require("../../utils/httpStatusText")
 
 const registerAccount = asyncWrapper(async(req,res)=>{
     const {email,password} = req.body;
