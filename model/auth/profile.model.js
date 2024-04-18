@@ -11,6 +11,7 @@ const clientSchema = new mongoose.Schema({
     maladieCronique: {type: Array, required:true},
     nocif: [{type : mongoose.Types.ObjectId,ref : "product"}],
     recomonde: [{type : mongoose.Types.ObjectId,ref : "product"}],
+    CodePromo : [{type : mongoose.Types.ObjectId,ref : "codePromo"}]
 },{timestamps: true});
 
 

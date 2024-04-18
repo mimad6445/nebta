@@ -1,5 +1,6 @@
 const Profiledb = require("../../model/auth/profile.model");
 const productdb =require("../../model/product.model");
+const codePromodb = require("../../model/home/CodePromo.model")
 const asyncWrapper = require('../../middleware/asyncWrapper');
 const httpStatusText = require("../../utils/httpStatusText")
 const eventEmitter = require("../../utils/eventEmitter");
@@ -10,7 +11,6 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
     const addNewProfile = new Profiledb({fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique});
     await addNewProfile.save();
     const product = await productdb.find();
-    console.log("product :" ,product);
 
     product.forEach(produit => {
         const recomonde = produit.Indication.some(maladie => maladieCronique.includes(maladie));
@@ -20,7 +20,9 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
             addNewProfile.nocif.push(produit._id);
         }
     });
-    addNewProfile.save()
+    const CodePromo = await codePromodb.find();
+    addNewProfile.CodePromo = CodePromo;
+    addNewProfile.save();
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewProfile }});
 })
 
@@ -85,6 +87,33 @@ eventEmitter.on('deleteProduct',async(id)=>{
 eventEmitter.on('updateProduct',async(id)=>{
     eventEmitter.emit('deleteProduct',id);
     eventEmitter.emit('addProduct',id);
+})
+
+eventEmitter.on('deleteCode',async(id)=>{
+    const Users = await Profiledb.find();
+    const CodePromo = await codePromodb.findById(id);
+    Users.forEach((user)=>{
+        user.CodePromo.pop(CodePromo);
+        user.save();
+    })
+})
+
+eventEmitter.on('updateCode',async(id)=>{
+    const Users = await Profiledb.find();
+    const CodePromo = await codePromodb.findById(id);
+    Users.forEach((user)=>{
+        user.CodePromo.pop(CodePromo);
+        user.CodePromo.push(CodePromo);
+        user.save();
+    })
+})
+
+eventEmitter.on('addCodePromo',async(CodePromo)=>{
+    const Users = await Profiledb.find();
+    Users.forEach((user)=>{
+        user.CodePromo.push(CodePromo);
+        user.save();
+    })
 })
 
 module.exports = {

@@ -14,8 +14,8 @@ const createCode = async (req,res)=>{
             Image,
             discount
         });
-        
         await newCode.save()
+        eventEmitter.emit('addCodePromo',newCode);
     res.status(201).json({ success: true, message: 'Code added successfully', code: newCode });
 }catch (error) {
     
@@ -33,7 +33,7 @@ const deleteCode = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Code not found' });
         }
         await codePromo.findByIdAndDelete(CodeId);
-
+        eventEmitter.emit('deleteCode',CodeId);
         res.status(200).json({ success: true, message: 'code deleted successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -73,8 +73,8 @@ const updateCode = async (req, res) => {
         if (!code) {
             return res.status(404).json({ success: false, message: 'Code not found' });
         }
+        eventEmitter.emit('updateCode',CodeId);
         res.status(200).json({ success: true, message: 'Code updated successfully', code });
-        
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
