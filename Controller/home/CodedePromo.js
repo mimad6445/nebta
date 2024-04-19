@@ -1,5 +1,5 @@
 const codePromo = require('../../model/home/CodePromo.model')
-
+const eventEmitter = require("../../utils/eventEmitter")
 
 const createCode = async (req,res)=>{
     try{
@@ -16,10 +16,10 @@ const createCode = async (req,res)=>{
         });
         await newCode.save()
         eventEmitter.emit('addCodePromo',newCode);
-    res.status(201).json({ success: true, message: 'Code added successfully', code: newCode });
+    res.status(201).json({ success: true,  code: newCode });
 }catch (error) {
     
-    res.status(500).json("error",error)
+    res.status(500).json("error")
     
 }}
 

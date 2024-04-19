@@ -7,8 +7,8 @@ const controller = require('../../Controller/home/CodedePromo')
 
 
 router.route('/')
-        .post(controller.createCode)
         .get(controller.getAllCode)
+        .post(controller.createCode)
 
 router.route('/:id')
         .delete(controller.deleteCode)
