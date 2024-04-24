@@ -89,32 +89,7 @@ eventEmitter.on('updateProduct',async(id)=>{
     eventEmitter.emit('addProduct',id);
 })
 
-eventEmitter.on('deleteCode',async(id)=>{
-    const Users = await Profiledb.find();
-    const CodePromo = await codePromodb.findById(id);
-    Users.forEach((user)=>{
-        user.CodePromo.pop(CodePromo);
-        user.save();
-    })
-})
 
-eventEmitter.on('updateCode',async(id)=>{
-    const Users = await Profiledb.find();
-    const CodePromo = await codePromodb.findById(id);
-    Users.forEach((user)=>{
-        user.CodePromo.pop(CodePromo);
-        user.CodePromo.push(CodePromo);
-        user.save();
-    })
-})
-
-eventEmitter.on('addCodePromo',async(CodePromo)=>{
-    const Users = await Profiledb.find();
-    Users.forEach((user)=>{
-        user.CodePromo.push(CodePromo);
-        user.save();
-    })
-})
 
 module.exports = {
     createProfile,

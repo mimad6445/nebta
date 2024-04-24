@@ -40,6 +40,9 @@ router.route('/:id')
         .patch(controller.addProfile)
         .delete(controller.deleteAccount)
 
+router.route('/codePromo/:id')
+        .patch(controller.removeCodePromo)
+
 router.route('update/:id')
         .patch(controller.updateAccount);
 

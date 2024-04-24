@@ -3,6 +3,8 @@ const asyncWrapper = require("../../middleware/asyncWrapper");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../../utils/generateToken");
 const httpStatusText = require("../../utils/httpStatusText")
+const codePromodb = require("../../model/home/CodePromo.model")
+const eventEmitter = require("../../utils/eventEmitter")
 
 const registerAccount = asyncWrapper(async(req,res)=>{
     const {email,password} = req.body;
@@ -12,6 +14,8 @@ const registerAccount = asyncWrapper(async(req,res)=>{
             res.status(400).json({ status: httpStatusText.SUCCESS, mesg: "E-mail already exists"});
         }
     const addNewAccount = new Accountdb({email,password:hashedPassword});
+    const CodePromo = await codePromodb.find();
+    addNewAccount.CodePromo = CodePromo;
     const token = await generateToken({ email:email , id: addNewAccount._id })
     addNewAccount.token = token;
     await addNewAccount.save();
@@ -28,6 +32,21 @@ const addProfile = asyncWrapper(async(req,res)=>{
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { Account }});
 })
 
+const removeCodePromo = asyncWrapper(async(req,res)=>{
+    const AccountId = req.params.id;
+    const { CodePromoId} = req.body;
+    const Account = await Accountdb.findById(AccountId);
+    if (!Account) {
+        return res.status(404).json({ success: httpStatusText.FAIL, message: "Account n'exist pas" });
+    }
+    Account.CodePromo.forEach((code)=>{
+        if(code === CodePromoId){
+            code.CodePromo.pop(CodePromoId);
+        }
+        Account.save();
+    })
+
+})
 
 const login = asyncWrapper(async(req,res)=>{
     const {email,password} = req.body;
@@ -72,11 +91,39 @@ const updateAccount = asyncWrapper(async(req,res,next)=>{
     }
 })
 
+eventEmitter.on('deleteCode',async(id)=>{
+    const Users = await Accountdb.find();
+    const CodePromo = await codePromodb.findById(id);
+    Users.forEach((user)=>{
+        user.CodePromo.pop(CodePromo);
+        user.save();
+    })
+})
+
+eventEmitter.on('updateCode',async(id)=>{
+    const Users = await Accountdb.find();
+    const CodePromo = await codePromodb.findById(id);
+    Users.forEach((user)=>{
+        user.CodePromo.pop(CodePromo);
+        user.CodePromo.push(CodePromo);
+        user.save();
+    })
+})
+
+eventEmitter.on('addCodePromo',async(CodePromo)=>{
+    const Users = await Accountdb.find();
+    Users.forEach((user)=>{
+        user.CodePromo.push(CodePromo);
+        user.save();
+    })
+})
+
 
 module.exports = {
     registerAccount,
     addProfile,
     login,
     updateAccount,
-    deleteAccount
+    deleteAccount,
+    removeCodePromo
 }
