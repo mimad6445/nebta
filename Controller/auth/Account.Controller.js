@@ -5,6 +5,8 @@ const generateToken = require("../../utils/generateToken");
 const httpStatusText = require("../../utils/httpStatusText")
 const codePromodb = require("../../model/home/CodePromo.model")
 const eventEmitter = require("../../utils/eventEmitter")
+const productdb = require("../../model/product.model");
+const Profiledb = require("../../model/auth/profile.model")
 
 const registerAccount = asyncWrapper(async(req,res)=>{
     const {email,password} = req.body;
@@ -22,6 +24,39 @@ const registerAccount = asyncWrapper(async(req,res)=>{
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewAccount }});
 })
 
+
+const singUp = asyncWrapper(async(req,res)=>{
+    const {email,password,phoneNumber,fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique} = req.body;
+    const hashedPassword = await bcrypt.hash(password,10);
+    const existingEmail = await Accountdb.findOne({ email });
+        if(existingEmail){
+            res.status(400).json({ status: httpStatusText.SUCCESS, mesg: "E-mail already exists"});
+        }
+    const addNewAccount = new Accountdb({email,password:hashedPassword,phoneNumber});
+    const CodePromo = await codePromodb.find();
+    addNewAccount.CodePromo = CodePromo;
+    const token = await generateToken({ email:email , id: addNewAccount._id })
+    addNewAccount.token = token;
+    await addNewAccount.save();
+    const addNewProfile = new Profiledb({fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique});
+    await addNewProfile.save();
+    const product = await productdb.find();
+    product.forEach(produit => {
+        const recomonde = produit.Indication.some(maladie => maladieCronique.includes(maladie));
+        if (recomonde) {
+            addNewProfile.recomonde.push(produit._id);
+        } else {
+            addNewProfile.nocif.push(produit._id);
+        }
+    });
+    addNewProfile.save();
+    addNewAccount.profile.push(addNewProfile._id);
+    addNewAccount.save();
+    // addNewProfile.populate('nocif');
+    // addNewProfile.populate('recomonde')
+    // addNewAccount.populate('profile');
+    res.status(201).json({status: httpStatusText.SUCCESS,data : {Account : addNewAccount}})
+})
 
 const addProfile = asyncWrapper(async(req,res)=>{  
     const AccountId = req.params.id;
@@ -125,5 +160,6 @@ module.exports = {
     login,
     updateAccount,
     deleteAccount,
-    removeCodePromo
+    removeCodePromo,
+    singUp
 }

@@ -24,6 +24,8 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 router.route('/')
         .post(controller.registerAccount);
 
+router.route('/singUp')
+        .post(controller.singUp)
 router.route('/login')
         .post(controller.login);
 

@@ -20,9 +20,6 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
             addNewProfile.nocif.push(produit._id);
         }
     });
-    const CodePromo = await codePromodb.find();
-    addNewProfile.CodePromo = CodePromo;
-    addNewProfile.save();
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewProfile }});
 })
 
