@@ -17,7 +17,7 @@ const sendMail = async (otp, email)=>{
     });
     const mailOptions = {
         from: process.env.MAIL ,
-        to: 'dzmimad6@gmail.com',
+        to: email,
         subject: 'nebtha Otp', 
         text: `your nebtha verification code is ${otp}`
     };
