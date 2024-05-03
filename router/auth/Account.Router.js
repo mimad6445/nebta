@@ -28,7 +28,14 @@ router.route('/singUp')
         .post(controller.singUp)
 router.route('/login')
         .post(controller.login);
-
+router.route('/phoneOtp')
+        .post(controller.otpLoginPhone);
+router.route('/phoneVierfyOtp')
+        .post(controller.virefyOtpPhone);
+router.route('/mailOtp')
+        .post(controller.otpLoginEmail);
+router.route('/mailVierfyOtp')
+        .post(controller.virefyOtpEmail);
 // Route for initiating Google OAuth authentication
 // router.route('/login/google')
 //         .get(passport.authenticate('google', { scope: ['profile', 'email'] }));

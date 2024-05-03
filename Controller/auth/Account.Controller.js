@@ -7,6 +7,7 @@ const codePromodb = require("../../model/home/CodePromo.model")
 const eventEmitter = require("../../utils/eventEmitter")
 const productdb = require("../../model/product.model");
 const Profiledb = require("../../model/auth/profile.model")
+const Otp = require("../../middleware/VirefyOtp")
 
 const registerAccount = asyncWrapper(async(req,res)=>{
     const {email,password} = req.body;
@@ -125,6 +126,32 @@ const updateAccount = asyncWrapper(async(req,res,next)=>{
         res.status(500).json({ success: httpStatusText.ERROR, message: 'Internal server error' });
     }
 })
+const otpLoginPhone = asyncWrapper(async(req,res,next)=>{
+    Otp.createOtpPhone(req.body,(err,result)=>{
+        if(err) return res.status(400).json({success : httpStatusText.ERROR , data : err })
+        return res.status(200).json({success : httpStatusText.SUCCESS , data : result })
+    })
+})
+const otpLoginEmail = asyncWrapper(async(req,res,next)=>{
+    Otp.createOtpEmail(req.body,(err,result)=>{
+        if(err) return res.status(400).json({success : httpStatusText.ERROR , data : err })
+        return res.status(200).json({success : httpStatusText.SUCCESS , data : result })
+    })
+})
+
+const virefyOtpPhone = asyncWrapper(async(req,res,next)=>{
+    Otp.virefyOtpPhone(req.body,(err,result)=>{
+        if(err) return next(err)
+        return res.status(200).json({success : httpStatusText.SUCCESS , data : result })
+    })
+})
+
+const virefyOtpEmail = asyncWrapper(async(req,res,next)=>{
+    Otp.virefyOtpEmail(req.body,(err,result)=>{
+        if(err) return next(err)
+        return res.status(200).json({success : httpStatusText.SUCCESS , data : result })
+    })
+})
 
 eventEmitter.on('deleteCode',async(id)=>{
     const Users = await Accountdb.find();
@@ -161,5 +188,9 @@ module.exports = {
     updateAccount,
     deleteAccount,
     removeCodePromo,
-    singUp
+    singUp,
+    otpLoginPhone,
+    otpLoginEmail,
+    virefyOtpEmail,
+    virefyOtpPhone
 }

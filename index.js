@@ -1,5 +1,5 @@
 const express = require('express')
-const Connectdb = require('./database/Connectdb')
+const Connectdb = require('./connection/Connectdb')
 const bodyParser = require('body-parser')
 const httpStatusText = require('./utils/httpStatusText');
 const cors = require('cors')
