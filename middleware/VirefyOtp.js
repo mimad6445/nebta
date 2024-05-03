@@ -2,6 +2,7 @@ const Otpgenerator = require("otp-generator")
 const crypto = require('node:crypto')
 require("dotenv").config()
 const sendSMS = require("../utils/sendSMS");
+const sendMail = require("../utils/sendMail")
 
 async function createOtpPhone(params,callback){
     const otp = Otpgenerator.generate(6,{
@@ -32,9 +33,7 @@ async function createOtpEmail(params,callback){
     const fullHash = `${hash}.${expiers}`
     console.log("your OTP is : ",otp);
     // Send email
-
-
-    
+    sendMail(otp,params.email)
     return callback(null,fullHash)
 }
 
