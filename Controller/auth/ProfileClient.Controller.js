@@ -15,9 +15,9 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
     product.forEach(produit => {
         const recomonde = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
         if (recomonde) {
-            addNewProfile.recomonde.push(produit._id);
-        } else {
             addNewProfile.nocif.push(produit._id);
+        } else {
+            addNewProfile.recomonde.push(produit._id);
         }
     });
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewProfile }});
