@@ -13,7 +13,7 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
     const product = await productdb.find();
 
     product.forEach(produit => {
-        const recomonde = produit.Indication.some(maladie => maladieCronique.includes(maladie));
+        const recomonde = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
         if (recomonde) {
             addNewProfile.recomonde.push(produit._id);
         } else {
