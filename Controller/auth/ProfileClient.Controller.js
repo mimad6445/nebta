@@ -13,13 +13,15 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
     const product = await productdb.find();
 
     product.forEach(produit => {
-        const recomonde = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
-        if (recomonde) {
+        const nocif = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
+        console.log(produit._id, nocif, produit.ContreIndication, maladieCronique);
+        if (nocif) {
             addNewProfile.nocif.push(produit._id);
         } else {
             addNewProfile.recomonde.push(produit._id);
         }
     });
+    
     res.status(201).json({ status: httpStatusText.SUCCESS, data: { addNewProfile }});
 })
 

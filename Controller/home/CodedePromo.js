@@ -26,19 +26,23 @@ const createCode = async (req,res)=>{
 
 const deleteCode = async (req, res) => {
     try {
-        const CodeId = req.params.id;
-
-        const code = await codePromo.findById(CodeId);
+        const codeId = req.params.id;
+        const code = await codePromo.findById(codeId);
+        
         if (!code) {
             return res.status(404).json({ success: false, message: 'Code not found' });
         }
-        await codePromo.findByIdAndDelete(CodeId);
-        eventEmitter.emit('deleteCode',CodeId);
-        res.status(200).json({ success: true, message: 'code deleted successfully' });
+        
+        await codePromo.findByIdAndDelete(codeId);
+        eventEmitter.emit('deleteCode', codeId);
+        
+        res.status(200).json({ success: true, message: 'Code deleted successfully' });
     } catch (error) {
+        console.error('Error deleting code:', error); // Log the error for debugging
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
 
 const getAllCode = async (req, res) => {
     try {
