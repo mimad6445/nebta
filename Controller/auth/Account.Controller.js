@@ -43,7 +43,7 @@ const singUp = asyncWrapper(async(req,res)=>{
     await addNewProfile.save();
     const product = await productdb.find();
     product.forEach(produit => {
-        const recomonde = produit.Indication.some(maladie => maladieCronique.includes(maladie));
+        const recomonde = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
         if (recomonde) {
             addNewProfile.recomonde.push(produit._id);
         } else {
@@ -54,7 +54,7 @@ const singUp = asyncWrapper(async(req,res)=>{
     addNewAccount.profile.push(addNewProfile._id);
     addNewAccount.save();
     // addNewProfile.populate('nocif');
-    // addNewProfile.populate('recomonde')
+    // addNewProfile.populate('recomonde');
     // addNewAccount.populate('profile');
     res.status(201).json({status: httpStatusText.SUCCESS,data : {Account : addNewAccount}})
 })
@@ -81,7 +81,6 @@ const removeCodePromo = asyncWrapper(async(req,res)=>{
         }
         Account.save();
     })
-
 })
 
 const login = asyncWrapper(async(req,res)=>{
