@@ -20,24 +20,18 @@ const createNews = async (req,res)=>{
 }}
 
 
-const deleteNews = async (req, res) => {
+const deleteCode = async (req, res) => {
     try {
-        const newsId = req.params.id;
-
-        const News = await news.findById(newsId);
-        if (!News) {
-            return res.status(404).json({ success: false, message: 'News not found' });
+        const codeId = req.params.id;
+        const code = await news.findOneAndDelete({ _id: codeId });
+        if (!code) {
+            return res.status(404).json({ success: false, message: 'Code not found' });
         }
-
-        await News.findByIdAndDelete(newsId);
-
         res.status(200).json({ success: true, message: 'News deleted successfully' });
     } catch (error) {
-        console.error('Error deleting News:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
-
 
 
 const getOneNew = async (req, res) => {

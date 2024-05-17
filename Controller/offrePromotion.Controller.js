@@ -24,14 +24,12 @@ const createOffre = async (req,res)=>{
 
 const deleteOffre = async (req, res) => {
     try {
-        const offreId = req.params.id;
-        const offre = await offrePromotion.findById(offreId);
-        if (!offre) {
-            return res.status(404).json({ success: false, message: 'Offre not found' });
+        const codeId = req.params.id;
+        const code = await offrePromotion.findOneAndDelete({ _id: codeId });
+        if (!code) {
+            return res.status(404).json({ success: false, message: 'Code not found' });
         }
-        await offre.findByIdAndDelete(offreId);
-
-        res.status(200).json({ success: true, message: 'offre deleted successfully' });
+        res.status(200).json({ success: true, message: 'Offre deleted successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
