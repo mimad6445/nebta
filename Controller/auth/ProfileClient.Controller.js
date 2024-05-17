@@ -36,6 +36,20 @@ const deleteProfile = asyncWrapper(async(req,res,next)=>{
     res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Profile deleted successfully' });
 })
 
+const getOneProfile = async (req, res) => {
+    try {
+        const codeId = req.params.id; 
+        const code = await Profiledb.findById(codeId); 
+        if (!code) {
+            return res.status(404).json({ message: 'Code not found' });
+        }
+
+        res.status(200).json(code); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const updateProfile = asyncWrapper(async(req,res,next)=>{
     try {
         const ProfileId = req.params.id;
@@ -93,5 +107,6 @@ eventEmitter.on('updateProduct',async(id)=>{
 module.exports = {
     createProfile,
     deleteProfile,
-    updateProfile
+    updateProfile,
+    getOneProfile
   };
