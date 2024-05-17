@@ -2,6 +2,7 @@ const Product = require('../model/product.model')
 const asyncWrapper = require("../middleware/asyncWrapper")
 const httpStutsText = require("../utils/httpStatusText");
 const eventEmitter = require("../utils/eventEmitter")
+const Profiledb = require("../model/auth/profile.model")
 
 const createProduct = async (req,res)=>{
     try{
@@ -45,7 +46,17 @@ const createProduct = async (req,res)=>{
         
         await newProduct.save()
         eventEmitter.emit('productChanged');
-        eventEmitter.emit('addProduct',newProduct._id);
+        // eventEmitter.emit('addProduct',newProduct._id);
+    const Users = await Profiledb.find();
+    Users.forEach((user)=>{
+        const nocif = newProduct.ContreIndication.some(maladie => maladie.includes(maladie));
+        if (nocif) {
+            addNewProfile.nocif.push(newProduct._id);
+        } else {
+            addNewProfile.recomonde.push(newProduct._id);
+        }
+        user.save();
+    })
         res.status(201).json({ success: true, message: 'Product added successfully', product: newProduct });
 }catch (error) {
     
@@ -65,7 +76,20 @@ const deleteProduct = async (req, res) => {
 
         await Product.findByIdAndDelete(productId);
         eventEmitter.emit('productChanged');
-        eventEmitter.emit('deleteProduct',productId);
+        // eventEmitter.emit('deleteProduct',productId);
+        const Users = await Profiledb.find();
+        Users.forEach((user)=>{
+            user.recomonde.forEach((productToDelete)=>{
+                if(productToDelete._id === productId){
+                    user.recomonde.pop(productToDelete)
+                }
+            });
+            user.nocif.forEach((productToDelete)=>{
+                if(productToDelete._id === productId){
+                    user.nocif.pop(productToDelete)
+                }
+            })
+        })
         res.status(200).json({ success: true, message: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);
@@ -106,7 +130,29 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
         eventEmitter.emit('productChanged');
-        eventEmitter.emit('updateProduct',productId);
+        // eventEmitter.emit('updateProduct',productId);
+        const Users = await Profiledb.find();
+        Users.forEach((user)=>{
+            user.recomonde.forEach((productToDelete)=>{
+                if(productToDelete._id === productId){
+                    user.recomonde.pop(productToDelete)
+                }
+            });
+            user.nocif.forEach((productToDelete)=>{
+                if(productToDelete._id === productId){
+                    user.nocif.pop(productToDelete)
+                }
+            })
+        })
+        Users.forEach((user)=>{
+            const nocif = product.ContreIndication.some(maladie => maladie.includes(maladie));
+            if (nocif) {
+                addNewProfile.nocif.push(productId);
+            } else {
+                addNewProfile.recomonde.push(productId);
+            }
+            user.save();
+        })
         res.status(200).json({ success: true, message: 'Product updated successfully', product });
     } catch (error) {
         console.error('Error updating product:', error);

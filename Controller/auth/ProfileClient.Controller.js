@@ -69,11 +69,11 @@ eventEmitter.on('addProduct',async(id)=>{
     const Users = await Profiledb.find();
     const produit = await productdb.findById(id);
     Users.forEach((user)=>{
-        const recomonde = produit.Indication.some(maladie => user.maladieCronique.includes(maladie))
-        if (recomonde) {
-            user.recomonde.push(id);
+        const nocif = produit.ContreIndication.some(maladie => maladie.includes(maladie));
+        if (nocif) {
+            addNewProfile.nocif.push(produit._id);
         } else {
-            user.nocif.push(id);
+            addNewProfile.recomonde.push(produit._id);
         }
         user.save();
     })
@@ -86,7 +86,6 @@ eventEmitter.on('deleteProduct',async(id)=>{
         user.recomonde.forEach((productToDelete)=>{
             if(productToDelete._id === id){
                 user.recomonde.pop(productToDelete)
-                
             }
         });
         user.nocif.forEach((productToDelete)=>{
