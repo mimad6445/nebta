@@ -43,11 +43,11 @@ const singUp = asyncWrapper(async(req,res)=>{
     await addNewProfile.save();
     const product = await productdb.find();
     product.forEach(produit => {
-        const recomonde = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
-        if (recomonde) {
-            addNewProfile.recomonde.push(produit._id);
-        } else {
+        const nocif = produit.ContreIndication.some(maladie => maladieCronique.includes(maladie));
+        if (nocif) {
             addNewProfile.nocif.push(produit._id);
+        } else {
+            addNewProfile.recomonde.push(produit._id);
         }
     });
     addNewProfile.save();
