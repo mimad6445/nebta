@@ -49,11 +49,11 @@ const createProduct = async (req,res)=>{
         // eventEmitter.emit('addProduct',newProduct._id);
     const Users = await Profiledb.find();
     Users.forEach((user)=>{
-        const nocif = newProduct.ContreIndication.some(maladie => maladie.includes(maladie));
+        const nocif = newProduct.ContreIndication.some(maladie => user.maladieCronique.includes(maladie));
         if (nocif) {
-            addNewProfile.nocif.push(newProduct._id);
+            user.nocif.push(newProduct._id);
         } else {
-            addNewProfile.recomonde.push(newProduct._id);
+            user.recomonde.push(newProduct._id);
         }
         user.save();
     })
@@ -147,9 +147,9 @@ const updateProduct = async (req, res) => {
         Users.forEach((user)=>{
             const nocif = product.ContreIndication.some(maladie => maladie.includes(maladie));
             if (nocif) {
-                addNewProfile.nocif.push(productId);
+                user.nocif.push(productId);
             } else {
-                addNewProfile.recomonde.push(productId);
+                user.recomonde.push(productId);
             }
             user.save();
         })
