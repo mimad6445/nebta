@@ -48,19 +48,21 @@ const createProduct = async (req,res)=>{
         eventEmitter.emit('productChanged');
         // eventEmitter.emit('addProduct',newProduct._id);
     const Users = await Profiledb.find();
-    Users.forEach((user)=>{
+    Users.forEach(async(user)=>{
         const nocif = newProduct.ContreIndication.some(maladie => user.maladieCronique.includes(maladie));
         if (nocif) {
             user.nocif.push(newProduct._id);
+            console.log("push to nocif")
         } else {
             user.recomonde.push(newProduct._id);
+            console.log("push to recomande")
         }
-        user.save();
+        await user.save()
     })
         res.status(201).json({ success: true, message: 'Product added successfully', product: newProduct });
 }catch (error) {
     
-    res.status(500).json("error",error)
+    res.status(500).json({error: error});
     
 }}
 
