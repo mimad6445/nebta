@@ -80,7 +80,7 @@ const deleteProduct = async (req, res) => {
         eventEmitter.emit('productChanged');
         // eventEmitter.emit('deleteProduct',productId);
         const Users = await Profiledb.find();
-        Users.forEach((user)=>{
+        Users.forEach(async(user)=>{
             user.recomonde.forEach((productToDelete)=>{
                 if(productToDelete._id === productId){
                     user.recomonde.pop(productToDelete)
@@ -91,6 +91,7 @@ const deleteProduct = async (req, res) => {
                     user.nocif.pop(productToDelete)
                 }
             })
+            await user.save()
         })
         res.status(200).json({ success: true, message: 'Product deleted successfully' });
     } catch (error) {
@@ -134,7 +135,7 @@ const updateProduct = async (req, res) => {
         eventEmitter.emit('productChanged');
         // eventEmitter.emit('updateProduct',productId);
         const Users = await Profiledb.find();
-        Users.forEach((user)=>{
+        Users.forEach(async(user)=>{
             user.recomonde.forEach((productToDelete)=>{
                 if(productToDelete._id === productId){
                     user.recomonde.pop(productToDelete)
@@ -145,15 +146,16 @@ const updateProduct = async (req, res) => {
                     user.nocif.pop(productToDelete)
                 }
             })
+            await user.save()
         })
-        Users.forEach((user)=>{
+        Users.forEach(async(user)=>{
             const nocif = product.ContreIndication.some(maladie => maladie.includes(maladie));
             if (nocif) {
                 user.nocif.push(productId);
             } else {
                 user.recomonde.push(productId);
             }
-            user.save();
+            await user.save();
         })
         res.status(200).json({ success: true, message: 'Product updated successfully', product });
     } catch (error) {
