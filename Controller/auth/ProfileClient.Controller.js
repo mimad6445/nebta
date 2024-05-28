@@ -68,21 +68,20 @@ const updateProfile = asyncWrapper(async(req,res,next)=>{
 eventEmitter.on('addProduct',async(id)=>{
     const Users = await Profiledb.find();
     const produit = await productdb.findById(id);
-    Users.forEach((user)=>{
+    Users.forEach(async(user)=>{
         const nocif = produit.ContreIndication.some(maladie => maladie.includes(maladie));
         if (nocif) {
             addNewProfile.nocif.push(produit._id);
         } else {
             addNewProfile.recomonde.push(produit._id);
         }
-        user.save();
+        await user.save();
     })
 })
 
 eventEmitter.on('deleteProduct',async(id)=>{
     const Users = await Profiledb.find();
-    const produit = await productdb.findById(id);
-    Users.forEach((user)=>{
+    Users.forEach(async(user)=>{
         user.recomonde.forEach((productToDelete)=>{
             if(productToDelete._id === id){
                 user.recomonde.pop(productToDelete)
@@ -93,6 +92,7 @@ eventEmitter.on('deleteProduct',async(id)=>{
                 user.nocif.pop(productToDelete)
             }
         })
+        await user.save();
     })
 })
 
