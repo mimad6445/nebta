@@ -39,7 +39,7 @@ const singUp = asyncWrapper(async(req,res)=>{
     const token = await generateToken({ email:email , id: addNewAccount._id })
     addNewAccount.token = token;
     await addNewAccount.save();
-    const addNewProfile = new Profiledb({fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique});
+    const addNewProfile = new Profiledb.Profile({fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique});
     await addNewProfile.save();
     const product = await productdb.find();
     product.forEach(produit => {

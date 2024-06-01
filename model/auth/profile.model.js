@@ -13,5 +13,22 @@ const clientSchema = new mongoose.Schema({
     recomonde: [{type : mongoose.Types.ObjectId,ref : "product"}]
 },{timestamps: true});
 
+const Profile = mongoose.model('Profile', clientSchema);
+async function getMaladieCroniqueCounts() {
+    try {
+        console.log("1");
+        const result = await Profile.aggregate([
+            { $unwind: "$maladieCronique" },
+            { $group: { _id: "$maladieCronique", count: { $sum: 1 } } },
+            { $sort: { count: -1 } }
+        ]);
+        return result; 
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
-module.exports= mongoose.model('Profile', clientSchema);
+module.exports = {
+    Profile,
+    getMaladieCroniqueCounts
+};

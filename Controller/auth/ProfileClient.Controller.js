@@ -1,4 +1,4 @@
-const Profiledb = require("../../model/auth/profile.model");
+const {Profile, getMaladieCroniqueCounts} = require("../../model/auth/profile.model");
 const productdb =require("../../model/product.model");
 const codePromodb = require("../../model/home/CodePromo.model")
 const asyncWrapper = require('../../middleware/asyncWrapper');
@@ -8,7 +8,7 @@ const eventEmitter = require("../../utils/eventEmitter");
 
 const createProfile = asyncWrapper(async(req,res,next)=>{
     const {fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique} = req.body;
-    const addNewProfile = new Profiledb({fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique});
+    const addNewProfile = new Profile({fullname,relative,gender,DateOfBirth,height,weight,avatar,maladieCronique});
     await addNewProfile.save();
     const product = await productdb.find();
 
@@ -28,18 +28,18 @@ const createProfile = asyncWrapper(async(req,res,next)=>{
 
 const deleteProfile = asyncWrapper(async(req,res,next)=>{
     const ProfileId = req.params.id;
-    const Profile = await Profiledb.findById(ProfileId);
+    const Profile = await Profile.findById(ProfileId);
     if (!Profile) {
         return res.status(404).json({ success: httpStatusText.FAIL, message: "Profile n'exist pas" });
     }
-    await Profiledb.findByIdAndDelete(ProfileId);
+    await Profile.findByIdAndDelete(ProfileId);
     res.status(200).json({ success: httpStatusText.SUCCESS, message: 'Profile deleted successfully' });
 })
 
 const getOneProfile = async (req, res) => {
     try {
         const codeId = req.params.id; 
-        const code = await Profiledb.findById(codeId); 
+        const code = await Profile.findById(codeId); 
         if (!code) {
             return res.status(404).json({ message: 'Code not found' });
         }
@@ -54,7 +54,7 @@ const updateProfile = asyncWrapper(async(req,res,next)=>{
     try {
         const ProfileId = req.params.id;
         const updates = req.body;
-        const Profile = await Profiledb.findByIdAndUpdate(ProfileId, updates, { new: true });
+        const Profile = await Profile.findByIdAndUpdate(ProfileId, updates, { new: true });
 
         if (!Profile) {
             return res.status(404).json({ success: httpStatusText.FAIL, message: 'Profile not found' });
@@ -66,22 +66,31 @@ const updateProfile = asyncWrapper(async(req,res,next)=>{
 })
 
 eventEmitter.on('addProduct',async(id)=>{
-    const Users = await Profiledb.find();
+    const Users = await Profile.find();
     const produit = await productdb.findById(id);
-    Users.forEach(async(user)=>{
+    Users.forEach((user)=>{
         const nocif = produit.ContreIndication.some(maladie => maladie.includes(maladie));
         if (nocif) {
             addNewProfile.nocif.push(produit._id);
         } else {
             addNewProfile.recomonde.push(produit._id);
         }
-        await user.save();
+        user.save();
     })
+})
+const Analyst = asyncWrapper(async(req,res,next)=>{
+    try{
+        const count = await getMaladieCroniqueCounts();
+        res.status(200).json({sucess: httpStatusText.SUCCESS,count: count })
+    }catch(error){
+        res.status(500).json({ success: httpStatusText.ERROR, message: 'Internal server error' });
+    }
 })
 
 eventEmitter.on('deleteProduct',async(id)=>{
-    const Users = await Profiledb.find();
-    Users.forEach(async(user)=>{
+    const Users = await Profile.find();
+    const produit = await productdb.findById(id);
+    Users.forEach((user)=>{
         user.recomonde.forEach((productToDelete)=>{
             if(productToDelete._id === id){
                 user.recomonde.pop(productToDelete)
@@ -92,7 +101,6 @@ eventEmitter.on('deleteProduct',async(id)=>{
                 user.nocif.pop(productToDelete)
             }
         })
-        await user.save();
     })
 })
 
@@ -107,5 +115,6 @@ module.exports = {
     createProfile,
     deleteProfile,
     updateProfile,
-    getOneProfile
+    getOneProfile,
+    Analyst
   };

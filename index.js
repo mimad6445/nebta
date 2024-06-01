@@ -6,7 +6,7 @@ const cors = require('cors')
 const virefyToken = require("./middleware/virefytoken")
 require('dotenv').config()
 
-
+const Analyst = require("./router/Analyst.Router")
 const productRouter = require('./router/productRouter')
 const articleRouter = require('./router/home/article.Router')
 const CodePromoRouter = require('./router/home/CodePromo.Router')
@@ -33,11 +33,12 @@ app.use('/api/Conseille',ConseilleRouter);
 app.use('/api/admin',AdminRouter);
 app.use('/api/Profile',virefyToken,ProfileRouter);
 app.use('/api/Account',AccountRouter)
+app.use('/api/Analyst',Analyst)
 
 const port = process.env.PORT || 8000
 
 app.all('*',(req,res,next)=>{
-    res.status(404).json({status : httpStatusText.ERROR , msg : "cannot found data"});
+    res.status(404).json({status : httpStatusText.ERROR , msg : "cannot found data 12"});
 })
 
 app.use('*',(error,req,res,next)=>{
